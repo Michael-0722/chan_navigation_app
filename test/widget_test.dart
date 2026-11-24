@@ -67,5 +67,44 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Profile'), findsWidgets);
     });
+
+    testWidgets('Use Case 5: Create a post without image URL (text-only post)',
+        (WidgetTester tester) async {
+      DemoAuth.login('admin', 'admin123');
+      await tester.pumpWidget(const StudentApp());
+
+      final textFields = find.byType(TextFormField);
+      await tester.enterText(textFields.at(0), 'admin');
+      await tester.enterText(textFields.at(1), 'admin123');
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Login'));
+      await tester.pumpAndSettle();
+
+      // Go to Social page
+      await tester.tap(find.byIcon(Icons.people_outline));
+      await tester.pumpAndSettle();
+
+      // Tap + floating action button to open Create Post bottom sheet
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle();
+
+      // Verify Create Post sheet opens
+      expect(find.text('Create Post'), findsOneWidget);
+
+      // Enter only caption (leave Image URL blank)
+      await tester.enterText(
+        find.widgetWithText(TextField, 'Caption'),
+        'Testing text-only post without any image URL!',
+      );
+
+      // Submit post
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Submit Post'));
+      await tester.pumpAndSettle();
+
+      // Confirm post appears in feed
+      expect(
+        find.text('Testing text-only post without any image URL!'),
+        findsOneWidget,
+      );
+    });
   });
 }

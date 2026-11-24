@@ -25,34 +25,36 @@ class _CreatePostSheetState extends State<CreatePostSheet> {
     final String caption = _captionController.text.trim();
     final String imageUrl = _imageController.text.trim();
 
-    if (caption.isEmpty || imageUrl.isEmpty) {
+    if (caption.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
-            'Complete both fields before submitting!',
+            'Please enter a caption before submitting!',
           ),
         ),
       );
       return;
     }
 
-    final uri = Uri.tryParse(imageUrl);
+    if (imageUrl.isNotEmpty) {
+      final uri = Uri.tryParse(imageUrl);
 
-    if (uri == null ||
-        !uri.hasAuthority ||
-        (uri.scheme != 'https' && uri.scheme != 'http')) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Enter a valid HTTP or HTTPS image URL.'),
-        ),
-      );
-      return;
+      if (uri == null ||
+          !uri.hasAuthority ||
+          (uri.scheme != 'https' && uri.scheme != 'http')) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Enter a valid HTTP or HTTPS image URL, or leave it blank.'),
+          ),
+        );
+        return;
+      }
     }
 
     final Post newPost = Post(
       username: widget.username,
       caption: caption,
-      imageUrl: imageUrl,
+      imageUrl: imageUrl.isEmpty ? null : imageUrl,
     );
 
     Navigator.pop(context, newPost);
@@ -93,6 +95,7 @@ class _CreatePostSheetState extends State<CreatePostSheet> {
               maxLines: 3,
               decoration: const InputDecoration(
                 labelText: 'Caption',
+                hintText: 'What is on your mind?',
                 prefixIcon: Icon(Icons.edit),
                 border: OutlineInputBorder(),
               ),
@@ -103,7 +106,8 @@ class _CreatePostSheetState extends State<CreatePostSheet> {
               controller: _imageController,
               keyboardType: TextInputType.url,
               decoration: const InputDecoration(
-                labelText: 'Image URL',
+                labelText: 'Image URL (Optional)',
+                hintText: 'https://example.com/image.jpg (Optional)',
                 prefixIcon: Icon(Icons.image),
                 border: OutlineInputBorder(),
               ),

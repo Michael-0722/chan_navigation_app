@@ -87,24 +87,26 @@ class _PostCardState extends State<PostCard> {
             ),
           ),
 
-          Image.network(
-            widget.post.imageUrl,
-            width: double.infinity,
-            height: 220,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return const SizedBox(
-                height: 220,
-                child: Center(
-                  child: Icon(
-                    Icons.broken_image,
-                    size: 70,
-                    color: Colors.grey,
+          if (widget.post.imageUrl != null &&
+              widget.post.imageUrl!.isNotEmpty)
+            Image.network(
+              widget.post.imageUrl!,
+              width: double.infinity,
+              height: 220,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return const SizedBox(
+                  height: 220,
+                  child: Center(
+                    child: Icon(
+                      Icons.broken_image,
+                      size: 70,
+                      color: Colors.grey,
+                    ),
                   ),
-                ),
-              );
-            },
-          ),
+                );
+              },
+            ),
 
           Row(
             children: [
