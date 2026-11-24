@@ -1,1 +1,17 @@
-{"flutter":{"platforms":{"dart":{"lib/firebase_options.dart":{"projectId":"chan-student-app","configurations":{"web":"1:374122341196:web:671f13670c5add1dd0e5e9"}}}}}}
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "flutter": {
+    "platforms": {
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "chan-student-app",
+          "configurations": {
+            "web": "1:374122341196:web:671f13670c5add1dd0e5e9"
+          }
+        }
+      }
+    }
+  }
+}
